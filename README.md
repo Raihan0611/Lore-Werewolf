@@ -1,2 +1,2 @@
-# Loe-Werewolf
+# Lore-Werewolf
 Cerita werewolf
