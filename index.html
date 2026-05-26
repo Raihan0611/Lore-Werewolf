@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desa Serigala — Lore Ultimate Werewolf</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=IM+Fell+English:ital@0;1&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0805;
+      --paper: #12100c;
+      --ink: #e8dcc8;
+      --ink-dim: #9e9080;
+      --gold: #c9a84c;
+      --gold-dim: #7a6230;
+      --red: #8b2020;
+      --red-bright: #c03030;
+      --moon: #d4c898;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--ink);
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.8;
+      overflow-x: hidden;
+      transition: background-color .6s, color .6s;
+    }
+
+    body.night {
+      --bg: #040302;
+      --ink: #ffeab8;
+      --ink-dim: #b09870;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9998;
+      opacity: .35;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    }
+
+    /* ── Progress bar ─────────────────────────── */
+    #pbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0;
+      z-index: 10000;
+      background: linear-gradient(to right, var(--gold-dim), var(--gold), #ffe08a);
+      box-shadow: 0 0 8px rgba(201, 168, 76, .5);
+      transition: width .1s linear;
+    }
+
+    #plabel {
+      position: fixed;
+      top: 8px;
+      right: 14px;
+      z-index: 10001;
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: .75rem;
+      color: var(--gold-dim);
+      letter-spacing: .1em;
+    }
+
+    /* ── Floating controls ────────────────────── */
+    #ctrl {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      z-index: 10001;
+    }
+
+    .cb {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-dim);
+      background: rgba(20, 16, 10, .85);
+      color: var(--gold);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+      transition: background .2s, border-color .2s, transform .15s;
+    }
+
+    .cb:hover {
+      background: rgba(201, 168, 76, .15);
+      border-color: var(--gold);
+    }
+
+    .cb.on {
+      background: rgba(201, 168, 76, .2);
+      border-color: var(--gold);
+    }
+
+    /* Compact control toggle + hidden buttons */
+    .ctrl-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+      align-items: center;
+    }
+
+    /* smaller buttons so they don't block reading */
+    .cb-s {
+      width: 28px;
+      height: 28px;
+      font-size: .78rem;
+      line-height: 1;
+      padding: 0;
+    }
+
+    /* toggle matches the small buttons and is circular */
+    .cb-toggle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: .78rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .cb-hidden {
+      transform: translateY(12px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform .28s cubic-bezier(.2, .9, .2, 1), opacity .24s;
+    }
+
+    #ctrl.expanded .cb-hidden {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #ctrl.expanded .ctrl-wrap .cb-hidden:nth-child(1) {
+      transition-delay: 0s;
+    }
+
+    #ctrl.expanded .ctrl-wrap .cb-hidden:nth-child(2) {
+      transition-delay: .04s;
+    }
+
+    #ctrl.expanded .ctrl-wrap .cb-hidden:nth-child(3) {
+      transition-delay: .08s;
+    }
+
+    .cb-toggle .tri {
+      display: inline-block;
+      transition: transform .28s cubic-bezier(.2, .9, .2, 1);
+    }
+
+    #ctrl.expanded .cb-toggle .tri {
+      transform: rotate(180deg);
+    }
+
+    /* ── Modal base ───────────────────────────── */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(4, 3, 2, .88);
+      backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .mbox {
+      background: #100d08;
+      border: 1px solid var(--gold-dim);
+      border-radius: 4px;
+      padding: 2rem 2.5rem;
+      max-width: 560px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .mbox h2 {
+      font-family: 'Cinzel Decorative', serif;
+      color: var(--gold);
+      font-size: 1rem;
+      text-align: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .mclose {
+      position: absolute;
+      top: .8rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: var(--ink-dim);
+      font-size: 1.2rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .mclose:hover {
+      color: var(--gold);
+    }
+
+    /* ── TOC ─────────────────────────────────── */
+    #toc-box ul {
+      list-style: none;
+    }
+
+    #toc-box li {
+      margin-bottom: .55rem;
+    }
+
+    #toc-box a {
+      color: var(--ink-dim);
+      text-decoration: none;
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      transition: color .2s;
+    }
+
+    #toc-box a:hover {
+      color: var(--gold);
+    }
+
+    .tnum {
+      font-family: 'Cinzel Decorative', serif;
+      font-style: normal;
+      font-size: .65rem;
+      color: var(--gold-dim);
+      min-width: 1.4rem;
+    }
+
+    /* ── Map box ─────────────────────────────── */
+    #map-box {
+      max-width: 680px;
+    }
+
+    #amap {
+      width: 100%;
+      height: auto;
+    }
+
+    /* ── Ending modal ────────────────────────── */
+    .ebts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem;
+      justify-content: center;
+      margin-bottom: 1.4rem;
+    }
+
+    .ech {
+      padding: .5rem 1rem;
+      background: rgba(201, 168, 76, .07);
+      border: 1px solid var(--gold-dim);
+      border-radius: 3px;
+      color: var(--ink);
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: .95rem;
+      cursor: pointer;
+      transition: background .2s, border-color .2s;
+    }
+
+    .ech:hover {
+      background: rgba(201, 168, 76, .18);
+      border-color: var(--gold);
+    }
+
+    #eres {
+      min-height: 70px;
+      font-family: 'Crimson Pro', serif;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--ink-dim);
+      font-style: italic;
+      border-top: 1px solid rgba(201, 168, 76, .2);
+      padding-top: 1.1rem;
+      opacity: 0;
+      transition: opacity .5s;
+    }
+
+    #eres.show {
+      opacity: 1;
+    }
+
+    .esub {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      color: var(--ink-dim);
+      font-size: .9rem;
+      margin-bottom: 1.4rem;
+      text-align: center;
+    }
+
+    /* ── Cover ───────────────────────────────── */
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      background: radial-gradient(ellipse at 50% 30%, #1a1408 0%, var(--bg) 70%);
+      border-bottom: 1px solid var(--gold-dim);
+      overflow: hidden;
+    }
+
+    .cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 20%, rgba(201, 168, 76, .06) 0%, transparent 60%);
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: rgba(212, 200, 152, .6);
+      border-radius: 50%;
+      animation: twinkle var(--d, 3s) ease-in-out infinite var(--dl, 0s);
+    }
+
+    @keyframes twinkle {
+
+      0%,
+      100% {
+        opacity: .2;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.6);
+      }
+    }
+
+    .moon {
+      font-size: 5rem;
+      margin-bottom: 1.5rem;
+      display: inline-block;
+      position: relative;
+      z-index: 1;
+      animation: mfl 6s ease-in-out infinite, mgl 4s ease-in-out infinite;
+    }
+
+    @keyframes mfl {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(-3deg);
+      }
+
+      50% {
+        transform: translateY(-18px) rotate(3deg);
+      }
+    }
+
+    @keyframes mgl {
+
+      0%,
+      100% {
+        filter: drop-shadow(0 0 20px rgba(212, 200, 152, .35));
+      }
+
+      50% {
+        filter: drop-shadow(0 0 55px rgba(212, 200, 152, .65));
+      }
+    }
+
+    .csub {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      color: var(--ink-dim);
+      font-size: 1rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ctitle {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2rem, 6vw, 4.5rem);
+      color: var(--gold);
+      line-height: 1.2;
+      text-shadow: 0 0 40px rgba(201, 168, 76, .3), 2px 2px 0 #000;
+      margin-bottom: .5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ctitle2 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(.9rem, 2.5vw, 1.6rem);
+      color: var(--moon);
+      letter-spacing: .15em;
+      margin-bottom: 2.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cdiv {
+      width: 200px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      margin: 1.5rem auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ctag {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      color: var(--ink-dim);
+      max-width: 500px;
+      font-size: 1.05rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .shint {
+      position: absolute;
+      bottom: 2rem;
+      font-size: .75rem;
+      letter-spacing: .2em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      animation: fud 2s ease-in-out infinite;
+      z-index: 1;
+    }
+
+    @keyframes fud {
+
+      0%,
+      100% {
+        opacity: .4;
+        transform: translateY(0);
+      }
+
+      50% {
+        opacity: 1;
+        transform: translateY(-5px);
+      }
+    }
+
+    /* ── Container / chapter ─────────────────── */
+    .wrap {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    .chapter {
+      margin-top: 5rem;
+      margin-bottom: 2.5rem;
+      text-align: center;
+      scroll-margin-top: 55px;
+    }
+
+    .clabel {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: .85rem;
+      letter-spacing: .3em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: .5rem;
+    }
+
+    .ctit {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      color: var(--gold);
+      text-shadow: 0 0 20px rgba(201, 168, 76, .2);
+    }
+
+    .corn {
+      color: var(--gold-dim);
+      font-size: 1.2rem;
+      margin-top: .8rem;
+      letter-spacing: .4em;
+    }
+
+    /* ── Prose ───────────────────────────────── */
+    p {
+      margin-bottom: 1.4rem;
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    p:first-of-type::first-letter {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 3.8rem;
+      line-height: .85;
+      float: left;
+      margin-right: .12em;
+      margin-top: .05em;
+      color: var(--gold);
+      text-shadow: 0 0 20px rgba(201, 168, 76, .4);
+    }
+
+    /* ── Role cards (collapsible) ────────────── */
+    .rc {
+      border: 1px solid var(--gold-dim);
+      border-left: 3px solid var(--gold);
+      background: rgba(201, 168, 76, .04);
+      margin: 2rem 0;
+      border-radius: 2px;
+      overflow: visible;
+      /* allow header label (::before) to extend outside */
+    }
+
+    .rc.evil {
+      border-color: var(--red);
+      border-left-color: var(--red-bright);
+      background: rgba(139, 32, 32, .06);
+    }
+
+    .rc.solo {
+      border-color: #4a3a7a;
+      border-left-color: #7060b8;
+      background: rgba(74, 58, 122, .06);
+    }
+
+    .rch {
+      padding: .9rem 1.6rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+      position: relative;
+    }
+
+    .rch::before {
+      content: attr(data-role);
+      position: absolute;
+      top: -.6rem;
+      left: 1rem;
+      background: var(--bg);
+      padding: 0 .6rem;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: .65rem;
+      color: var(--gold);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    .rc.evil .rch::before {
+      color: var(--red-bright);
+    }
+
+    .rc.solo .rch::before {
+      color: #9080d8;
+    }
+
+    .rname {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.15rem;
+      color: var(--moon);
+    }
+
+    .rc.evil .rname {
+      color: #e08080;
+    }
+
+    .rc.solo .rname {
+      color: #b0a0e8;
+    }
+
+    .rtog {
+      color: var(--gold-dim);
+      font-size: .85rem;
+      transition: transform .3s;
+      flex-shrink: 0;
+    }
+
+    .rc.open .rtog {
+      transform: rotate(180deg);
+    }
+
+    .rcb {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .4s cubic-bezier(.4, 0, .2, 1), padding .3s;
+      padding: 0 1.6rem;
+    }
+
+    .rc.open .rcb {
+      max-height: 600px;
+      padding: 0 1.6rem 1.2rem;
+    }
+
+    .rcb p {
+      margin: 0;
+      font-size: .95rem;
+    }
+
+    /* ── Scene / pullquote / hr ──────────────── */
+    .scene {
+      margin: 2.5rem 0;
+      padding: 1.5rem 2rem;
+      background: rgba(0, 0, 0, .35);
+      border-top: 1px solid var(--gold-dim);
+      border-bottom: 1px solid var(--gold-dim);
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--ink-dim);
+      line-height: 1.9;
+      text-align: center;
+    }
+
+    .pq {
+      text-align: center;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--gold);
+      line-height: 1.5;
+      margin: 3rem 0;
+      padding: 0 2rem;
+    }
+
+    .pq::before,
+    .pq::after {
+      content: '—';
+      color: var(--gold-dim);
+      display: block;
+      font-size: 1rem;
+      margin: .5rem 0;
+    }
+
+    hr.f {
+      border: none;
+      text-align: center;
+      margin: 3rem 0;
+      color: var(--gold-dim);
+      font-size: 1.2rem;
+      letter-spacing: .8em;
+    }
+
+    hr.f::before {
+      content: '✦ ✦ ✦';
+    }
+
+    /* ── Roster table ────────────────────────── */
+    .roster {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      font-size: .95rem;
+    }
+
+    .roster th {
+      font-family: 'IM Fell English', serif;
+      font-size: .8rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      border-bottom: 1px solid var(--gold-dim);
+      padding: .5rem .8rem;
+      text-align: left;
+    }
+
+    .roster td {
+      padding: .7rem .8rem;
+      border-bottom: 1px solid rgba(201, 168, 76, .1);
+      vertical-align: top;
+    }
+
+    .roster tr:hover td {
+      background: rgba(201, 168, 76, .04);
+    }
+
+    .em {
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    .tg {
+      color: #70c080;
+    }
+
+    .te {
+      color: #e08080;
+    }
+
+    .ts {
+      color: #b0a0e8;
+    }
+
+    .tn {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+    }
+
+    /* ── Ending section ──────────────────────── */
+    .end-sec {
+      margin-top: 5rem;
+      padding: 3rem 2rem;
+      text-align: center;
+      border-top: 1px solid var(--gold-dim);
+    }
+
+    .end-tit {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.5rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .brev {
+      display: inline-block;
+      margin-top: 1.2rem;
+      padding: .7rem 2rem;
+      background: rgba(201, 168, 76, .08);
+      border: 1px solid var(--gold);
+      border-radius: 3px;
+      color: var(--gold);
+      font-family: 'Cinzel Decorative', serif;
+      font-size: .75rem;
+      letter-spacing: .1em;
+      cursor: pointer;
+      transition: background .2s, box-shadow .2s;
+    }
+
+    .brev:hover {
+      background: rgba(201, 168, 76, .2);
+      box-shadow: 0 0 18px rgba(201, 168, 76, .25);
+    }
+
+    /* ── Fade-in ─────────────────────────────── */
+    .chapter,
+    .rc,
+    .scene,
+    p,
+    .pq,
+    .roster {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .vis {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+
+    @media(max-width:600px) {
+      .wrap {
+        padding: 2rem 1.2rem 4rem;
+      }
+
+      p:first-of-type::first-letter {
+        font-size: 2.8rem;
+      }
+
+      .mbox {
+        padding: 1.5rem 1.2rem;
+      }
+
+      .roster {
+        font-size: .82rem;
+      }
+
+      .roster th,
+      .roster td {
+        padding: .4rem .4rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Progress bar ── -->
+  <div id="pbar"></div>
+  <div id="plabel">Bab 1 / 11</div>
+
+  <!-- ── Controls ── -->
+  <div id="ctrl">
+    <div class="ctrl-wrap">
+      <button class="cb cb-hidden cb-s" id="btoc" title="Daftar Isi">☰</button>
+      <button class="cb cb-hidden cb-s" id="bmap" title="Peta Amaraveld">🗺</button>
+      <button class="cb cb-hidden cb-s" id="bmut" title="Suara">🔇</button>
+    </div>
+    <button class="cb cb-toggle" id="btoggle" aria-expanded="false" title="Tampilkan Kontrol"><span
+        class="tri">▲</span></button>
+  </div>
+
+  <!-- ══ TOC Modal ══ -->
+  <div class="modal" id="tocM">
+    <div class="mbox" id="toc-box">
+      <button class="mclose" data-close="tocM">✕</button>
+      <h2>📜 Daftar Isi</h2>
+      <ul>
+        <li><a href="#b1" data-close="tocM"><span class="tnum">I</span> Desa di Ujung Hutan</a></li>
+        <li><a href="#b2" data-close="tocM"><span class="tnum">II</span> Para Penghuni Desa</a></li>
+        <li><a href="#b3" data-close="tocM"><span class="tnum">III</span> Malam Pertama</a></li>
+        <li><a href="#b4" data-close="tocM"><span class="tnum">IV</span> Fajar — Darah di Antara Puing</a></li>
+        <li><a href="#b5" data-close="tocM"><span class="tnum">V</span> Siang — Percakapan dan Curiga</a></li>
+        <li><a href="#b6" data-close="tocM"><span class="tnum">VI</span> Sore — Pengadilan Tanpa Hakim</a></li>
+        <li><a href="#b7" data-close="tocM"><span class="tnum">VII</span> Malam Kedua — Ramuan dan Racun</a></li>
+        <li><a href="#b8" data-close="tocM"><span class="tnum">VIII</span> Kebangkitan — Keajaiban Necromancer</a></li>
+        <li><a href="#b9" data-close="tocM"><span class="tnum">IX</span> Kutukan si Terkutuk</a></li>
+        <li><a href="#b10" data-close="tocM"><span class="tnum">X</span> Akhir — Siapa yang Tersisa?</a></li>
+        <li><a href="#bep" data-close="tocM"><span class="tnum">✦</span> Epilog</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══ Map Modal ══ -->
+  <div class="modal" id="mapM">
+    <div class="mbox" id="map-box" style="max-width:700px">
+      <button class="mclose" data-close="mapM">✕</button>
+      <h2>🗺 Peta Amaraveld</h2>
+      <svg id="amap" viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="bg2" cx="50%" cy="50%" r="70%">
+            <stop offset="0%" stop-color="#1a1508" />
+            <stop offset="100%" stop-color="#080604" />
+          </radialGradient>
+          <filter id="glo">
+            <feGaussianBlur stdDeviation="2" result="b" />
+            <feMerge>
+              <feMergeNode in="b" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <symbol id="T" viewBox="0 0 16 20">
+            <polygon points="8,0 16,14 0,14" fill="#1e3020" />
+            <polygon points="8,5 15,16 1,16" fill="#244028" />
+            <rect x="6" y="14" width="4" height="6" fill="#3a2010" />
+          </symbol>
+          <symbol id="H" viewBox="0 0 22 22">
+            <polygon points="11,1 22,10 0,10" fill="#5a3820" />
+            <rect x="2" y="10" width="18" height="12" fill="#4a2e18" />
+            <rect x="7" y="13" width="8" height="9" fill="#2a1a0a" />
+            <rect x="3" y="11" width="5" height="4" fill="#c9a84c" opacity=".25" />
+            <rect x="14" y="11" width="5" height="4" fill="#c9a84c" opacity=".25" />
+          </symbol>
+        </defs>
+        <rect width="600" height="420" fill="url(#bg2)" />
+        <!-- Roads -->
+        <path d="M300,215 Q255,248 195,268 Q145,282 95,298" stroke="#3a2e18" stroke-width="7" fill="none"
+          stroke-linecap="round" opacity=".55" />
+        <path d="M300,215 Q345,238 392,228 Q442,218 502,238" stroke="#3a2e18" stroke-width="7" fill="none"
+          stroke-linecap="round" opacity=".55" />
+        <path d="M300,215 Q300,175 298,138 Q295,108 285,78" stroke="#3a2e18" stroke-width="7" fill="none"
+          stroke-linecap="round" opacity=".55" />
+        <path d="M300,215 Q312,258 322,295 Q332,328 342,368" stroke="#3a2e18" stroke-width="6" fill="none"
+          stroke-linecap="round" opacity=".45" />
+        <!-- Forest -->
+        <use href="#T" x="18" y="18" width="22" height="28" />
+        <use href="#T" x="43" y="8" width="26" height="32" />
+        <use href="#T" x="68" y="23" width="20" height="26" />
+        <use href="#T" x="28" y="48" width="24" height="30" />
+        <use href="#T" x="58" y="50" width="22" height="28" />
+        <use href="#T" x="88" y="13" width="20" height="26" />
+        <use href="#T" x="8" y="63" width="24" height="30" />
+        <use href="#T" x="98" y="45" width="20" height="26" />
+        <use href="#T" x="116" y="18" width="22" height="28" />
+        <use href="#T" x="76" y="70" width="20" height="26" />
+        <text x="62" y="108" fill="#4a6040" font-family="IM Fell English,serif" font-style="italic" font-size="11"
+          text-anchor="middle" opacity=".75">Hutan Tak Bernama</text>
+        <!-- Village fence -->
+        <rect x="148" y="98" width="314" height="264" rx="8" fill="none" stroke="#5a3820" stroke-width="2"
+          stroke-dasharray="10,5" opacity=".45" />
+        <text x="148" y="93" fill="#7a5a30" font-family="IM Fell English,serif" font-style="italic" font-size="9"
+          opacity=".65">— Pagar Desa —</text>
+        <!-- Alun-alun -->
+        <ellipse cx="300" cy="218" rx="40" ry="28" fill="#2a2010" stroke="#7a6230" stroke-width="1.5" opacity=".7" />
+        <use href="#T" x="282" y="222" width="14" height="18" />
+        <use href="#T" x="300" y="224" width="14" height="18" />
+        <!-- Well -->
+        <ellipse cx="332" cy="228" rx="9" ry="5" fill="#1a1408" stroke="#7a6230" stroke-width="1.2" />
+        <rect x="323" y="222" width="18" height="8" rx="1" fill="#2a2010" stroke="#7a6230" stroke-width="1.2" />
+        <line x1="332" y1="218" x2="332" y2="222" stroke="#7a6230" stroke-width="1.5" />
+        <text x="300" y="213" fill="#c9a84c" font-family="IM Fell English,serif" font-style="italic" font-size="10"
+          text-anchor="middle">Alun-Alun</text>
+        <!-- Houses -->
+        <use href="#H" x="272" y="112" width="26" height="26" filter="url(#glo)" />
+        <text x="285" y="109" fill="#c9b060" font-family="IM Fell English,serif" font-style="italic" font-size="9.5"
+          text-anchor="middle">Rumah Peramal 👳🏻🔮</text>
+
+        <use href="#H" x="398" y="128" width="26" height="26" />
+        <text x="411" y="125" fill="#70c080" font-family="IM Fell English,serif" font-style="italic" font-size="9.5"
+          text-anchor="middle">Rumah Guardian 🛡🗡</text>
+
+        <use href="#H" x="170" y="172" width="26" height="26" />
+        <text x="183" y="169" fill="#b0a0d8" font-family="IM Fell English,serif" font-style="italic" font-size="9.5"
+          text-anchor="middle">Rumah Penyihir 🧙🏻‍♀️</text>
+
+        <use href="#H" x="428" y="282" width="26" height="26" />
+        <text x="441" y="279" fill="#e08080" font-family="IM Fell English,serif" font-style="italic" font-size="9.5"
+          text-anchor="middle">Markas Werewolf 🐺👑</text>
+
+        <use href="#H" x="166" y="302" width="26" height="26" />
+        <text x="179" y="299" fill="#c09060" font-family="IM Fell English,serif" font-style="italic" font-size="9.5"
+          text-anchor="middle">Bengkel Tanner 🪓🩸</text>
+
+        <use href="#H" x="474" y="108" width="26" height="26" />
+        <text x="487" y="105" fill="#a0c0e0" font-family="IM Fell English,serif" font-style="italic" font-size="9.5"
+          text-anchor="middle">Rumah Necromancer 🔮</text>
+
+        <use href="#H" x="438" y="208" width="26" height="26" />
+        <text x="451" y="205" fill="#d0b060" font-family="IM Fell English,serif" font-style="italic" font-size="9.5"
+          text-anchor="middle">Rumah Hunter 🏹</text>
+
+        <use href="#H" x="508" y="328" width="22" height="22" opacity=".55" />
+        <text x="519" y="325" fill="#9080d8" font-family="IM Fell English,serif" font-style="italic" font-size="9"
+          text-anchor="middle" opacity=".65">??? Corrupt 🧑🏻‍💻</text>
+
+        <!-- Moon -->
+        <circle cx="555" cy="48" r="28" fill="#1e1c10" stroke="#c9a84c" stroke-width="1.5" opacity=".7" />
+        <text x="555" y="55" fill="#c9a84c" font-size="22" text-anchor="middle" opacity=".8">🌕</text>
+        <!-- Legend -->
+        <rect x="12" y="350" width="128" height="58" rx="3" fill="#100d08" stroke="#7a6230" stroke-width="1"
+          opacity=".8" />
+        <text x="76" y="365" fill="#c9a84c" font-family="IM Fell English,serif" font-style="italic" font-size="9.5"
+          text-anchor="middle">Legenda</text>
+        <use href="#H" x="16" y="367" width="14" height="14" />
+        <text x="34" y="378" fill="#9e9080" font-family="IM Fell English,serif" font-style="italic" font-size="9">Rumah
+          Warga</text>
+        <use href="#T" x="16" y="383" width="14" height="18" />
+        <text x="34" y="394" fill="#9e9080" font-family="IM Fell English,serif" font-style="italic" font-size="9">Hutan
+          / Pohon</text>
+        <!-- Fog -->
+        <ellipse cx="480" cy="405" rx="140" ry="30" fill="#0a0805" opacity=".7" />
+        <text x="480" y="410" fill="#3a3020" font-family="IM Fell English,serif" font-style="italic" font-size="10"
+          text-anchor="middle" opacity=".45">~ batas hutan ~</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ══ Ending Modal ══ -->
+  <div class="modal" id="endM">
+    <div class="mbox" style="text-align:center">
+      <button class="mclose" data-close="endM">✕</button>
+      <h2>🎲 Ungkap Takdir</h2>
+      <p class="esub">Pilih siapa yang bertahan di penghujung malam Amaraveld…</p>
+      <div class="ebts">
+        <button class="ech" data-k="warga">☀️ Warga Menang</button>
+        <button class="ech" data-k="werewolf">🌕 Werewolf Menang</button>
+        <button class="ech" data-k="tanner">🪓 Tanner Menang</button>
+        <button class="ech" data-k="corrupt">🧑🏻‍💻 Corrupt Menang</button>
+        <button class="ech" data-k="arsonist">🔥 Arsonist Menang</button>
+      </div>
+      <div id="eres"></div>
+    </div>
+  </div>
+
+  <!-- ══ COVER ══ -->
+  <div class="cover" id="cover">
+    <div class="moon">🌕</div>
+    <div class="csub">Sebuah Lore</div>
+    <div class="ctitle">Desa Serigala</div>
+    <div class="ctitle2">Kronik Malam yang Tak Pernah Berakhir</div>
+    <div class="cdiv"></div>
+    <div class="ctag">Kisah tentang kepercayaan, pengkhianatan, dan kegelapan yang bersembunyi di balik wajah tetangga.
+    </div>
+    <div class="shint">↓ Gulir untuk membaca ↓</div>
+  </div>
+
+  <!-- ══ CONTENT ══ -->
+  <div class="wrap">
+
+    <div class="chapter" id="b1">
+      <div class="clabel">Bab Satu</div>
+      <div class="ctit">Desa di Ujung Hutan</div>
+      <div class="corn">⸻ ✦ ⸻</div>
+    </div>
+
+    <p>Tidak ada yang ingat sejak kapan desa itu berdiri. Orang-orang bilang desa Amaraveld sudah ada sebelum peta
+      digambar, sebelum jalan batu dibangun, bahkan sebelum nama-nama diberikan kepada tempat-tempat di dunia ini. Yang
+      jelas, desa itu tumbuh di tepian hutan yang tak bernama — hutan dengan pohon-pohon besar yang daunnya tidak pernah
+      jatuh meski musim berganti, dan kabut yang menggulung masuk ke desa setiap kali malam menjelang.</p>
+
+    <p>Warga Amaraveld adalah orang-orang keras. Mereka tahu cara bertahan hidup. Mereka menanam gandum di tanah
+      berbatu, memelihara ternak di padang sempit, dan membangun pagar tinggi dari kayu jati yang mereka tebang sendiri.
+      Mereka percaya pada kerja keras, pada kejujuran, dan pada satu hukum utama yang berlaku turun-temurun: <em>siapa
+        yang mengancam desa, akan dihakimi bersama.</em></p>
+
+    <p>Hukum itu lahir dari pengalaman pahit. Bertahun-tahun lalu, sebelum warga yang sekarang bahkan lahir, Amaraveld
+      pernah hampir musnah oleh sesuatu yang menyusup dari dalam hutan. Sesuatu yang berjalan di atas dua kaki di siang
+      hari, dan merayap dengan empat kaki di tengah malam. Sesuatu yang memiliki wajah manusia tapi lapar seperti
+      binatang.</p>
+
+    <p>Werewolf.</p>
+
+    <div class="scene">
+      "Ketika bulan purnama naik ke langit dan kabut merayap masuk lewat celah pagar,<br>
+      itulah saatnya kau menutup pintu rapat-rapat dan tidak keluar sampai fajar.<br>
+      Bukan karena takut — tapi karena di luar sana, temanmu mungkin bukan temanmu lagi."<br><br>
+      — Pepatah lama Amaraveld
+    </div>
+
+    <p>Dan malam ini, sejarah berulang. Lagi.</p>
+    <hr class="f">
+
+    <div class="chapter" id="b2">
+      <div class="clabel">Bab Dua</div>
+      <div class="ctit">Para Penghuni Desa</div>
+      <div class="corn">⸻ ✦ ⸻</div>
+    </div>
+
+    <p>Setiap penduduk Amaraveld memiliki peran dan tempatnya sendiri. Bukan karena ada yang menunjuk atau memilih,
+      melainkan karena takdir — atau kutukan — yang entah datang dari mana, tiba-tiba melekat pada seseorang sejak
+      mereka pertama kali membuka mata di desa ini.</p>
+
+    <p>Di siang hari mereka semua tampak sama: para petani, pedagang, ibu rumah tangga, dan anak-anak yang berlarian di
+      jalan tanah. Tidak ada yang bisa menerka siapa yang menyimpan rahasia terberat ketika matahari terbenam dan malam
+      datang menelan desa.</p>
+
+    <p>Inilah mereka — tiga belas jiwa yang malam ini harus saling bertahan hidup:</p>
+
+    <table class="roster">
+      <tr>
+        <th></th>
+        <th>Nama Peran</th>
+        <th>Faksi</th>
+        <th>Kekuatan Rahasia</th>
+      </tr>
+      <tr>
+        <td class="em">👨🏻‍🌾</td>
+        <td class="tn tg">Warga</td>
+        <td class="tg">Tim Baik</td>
+        <td>Insting dan suara hati nurani dalam voting</td>
+      </tr>
+      <tr>
+        <td class="em">👳🏻🔮</td>
+        <td class="tn tg">Peramal (Seer)</td>
+        <td class="tg">Tim Baik</td>
+        <td>Menerawang satu jiwa tiap malam untuk melihat rolnya</td>
+      </tr>
+      <tr>
+        <td class="em">🛡🗡</td>
+        <td class="tn tg">Penjaga (Guardian)</td>
+        <td class="tg">Tim Baik</td>
+        <td>Melindungi satu orang dari serangan Werewolf tiap malam</td>
+      </tr>
+      <tr>
+        <td class="em">🧙🏻‍♀️</td>
+        <td class="tn tg">Penyihir (Witch)</td>
+        <td class="tg">Tim Baik</td>
+        <td>Satu racun mematikan, satu ramuan penyembuh — pilih bijak</td>
+      </tr>
+      <tr>
+        <td class="em">🏹</td>
+        <td class="tn tg">Pemburu (Hunter)</td>
+        <td class="tg">Tim Baik</td>
+        <td>Jika mati di-vote, menembak satu orang sebelum jatuh</td>
+      </tr>
+      <tr>
+        <td class="em">🔮🪄</td>
+        <td class="tn tg">Necromancer</td>
+        <td class="tg">Tim Baik</td>
+        <td>Menghidupkan kembali satu orang yang sudah mati (sekali seumur hidup)</td>
+      </tr>
+      <tr>
+        <td class="em">🧟‍♂</td>
+        <td class="tn tg">Terkutuk (Cursed)</td>
+        <td class="tg">Tim Baik*</td>
+        <td>Jika diserang Werewolf, bangkit menjadi Werewolf — sang penyerang mati</td>
+      </tr>
+      <tr>
+        <td class="em">🐺</td>
+        <td class="tn te">Werewolf</td>
+        <td class="te">Tim Jahat</td>
+        <td>Membunuh satu warga tiap malam</td>
+      </tr>
+      <tr>
+        <td class="em">🐺👑</td>
+        <td class="tn te">Alpha</td>
+        <td class="te">Tim Jahat</td>
+        <td>Jika mati di-vote, dapat mengubah satu warga menjadi Werewolf</td>
+      </tr>
+      <tr>
+        <td class="em">🧙🏼‍♂️🔮</td>
+        <td class="tn te">Penyihir Gelap (Sorcerer)</td>
+        <td class="te">Tim Jahat</td>
+        <td>Mengidentifikasi siapa Peramal untuk dilaporkan ke Werewolf</td>
+      </tr>
+      <tr>
+        <td class="em">🪓🩸</td>
+        <td class="tn ts">Penyamak (Tanner)</td>
+        <td class="ts">Solo</td>
+        <td>Tujuannya satu: mati di tangan warga lewat voting</td>
+      </tr>
+      <tr>
+        <td class="em">🧑🏻‍💻</td>
+        <td class="tn ts">Corrupt</td>
+        <td class="ts">Solo</td>
+        <td>Men-hack satu player tiap malam, menang jika jadi orang terakhir yang hidup</td>
+      </tr>
+      <tr>
+        <td class="em">🔥</td>
+        <td class="tn ts">Arsonis (Arsonist)</td>
+        <td class="ts">Solo</td>
+        <td>Menyebar bahan bakar ke semua rumah, menang jika semua sudah terisi dan ia masih hidup</td>
+      </tr>
+    </table>
+    <hr class="f">
+
+    <div class="chapter" id="b3">
+      <div class="clabel">Bab Tiga</div>
+      <div class="ctit">Malam Pertama</div>
+      <div class="corn">⸻ ✦ ⸻</div>
+    </div>
+
+    <p>Kabut datang lebih awal dari biasanya malam itu. Warga Amaraveld berkumpul di alun-alun untuk satu pengumuman
+      yang sudah mereka takuti selama bertahun-tahun: tanda cakar — tiga goresan panjang di kayu pintu gerbang — telah
+      ditemukan lagi. Werewolf ada di antara mereka. Suasana panik terlihat jelas di wajah-wajah mereka, meski mereka
+      mencoba menutupi dengan keheningan yang mencengangkan.</p>
+
+    <p>Ketua desa yang tua menutup pertemuan singkat itu dengan sebuah kalimat yang terasa seperti vonis. <em>"Semua
+        orang pulang. Kunci pintu. Dan ingat — siapapun yang berjalan malam ini, dia bukan kawan."</em> Lalu lampu-lampu
+      padam satu per satu, dan desa tenggelam dalam kegelapan yang tak tertembus. Setiap rumah menjadi benteng kecil di
+      hadapan ketakutan yang sama.</p>
+
+    <div class="rc evil">
+      <div class="rch" data-role="Tim Jahat — Werewolf &amp; Alpha">
+        <div class="rname">🐺 Werewolf &amp; 🐺👑 Alpha — Pembunuh Bayangan</div>
+        <span class="rtog">▼</span>
+      </div>
+      <div class="rcb">
+        <p>Di ujung desa, di sebuah rumah dengan jendela yang selalu tertutup, dua sosok duduk berbisik dalam gelap.
+          Mereka sudah di sini sejak musim dingin yang lalu — berbaur, berpura-pura, tertawa bersama warga di pasar.
+          Tapi malam ini, mereka tidak perlu berpura-pura lagi. Alpha menekan telapak tangannya ke meja dan berkata
+          pelan kepada Werewolf di sebelahnya: <em>"Malam ini, kita bunuh si Peramal. Kalau dia masih hidup, kita
+            tamat."</em></p>
+      </div>
+    </div>
+
+    <p>Setelah memastikan tidak ada yang melihat, Alpha dan Werewolf bergerak keluar melalui pintu belakang. Mereka
+      sudah tahu target malam ini. Tapi yang tidak mereka ketahui — ada dua pasang mata yang juga terjaga di malam yang
+      sama.</p>
+
+    <div class="rc">
+      <div class="rch" data-role="Tim Baik — Peramal (Seer)">
+        <div class="rname">👳🏻🔮 Si Peramal — Mata yang Tak Pernah Tidur</div>
+        <span class="rtog">▼</span>
+      </div>
+      <div class="rcb">
+        <p>Di kamar kecilnya yang penuh dengan buku tua dan kristal retak, si Peramal memegang jimat pemberian neneknya.
+          Tiap malam, ia memejamkan mata dan menerawang — dan tiap malam, ia melihat wajah seseorang di balik bayangan.
+          Malam ini ia sudah punya firasat. Ia sudah tahu siapa yang harus ia periksa. Tapi apakah ia akan selamat
+          sampai pagi untuk menyampaikan temuannya kepada desa?</p>
+      </div>
+    </div>
+
+    <div class="rc">
+      <div class="rch" data-role="Tim Baik — Penjaga (Guardian)">
+        <div class="rname">🛡🗡 Si Penjaga — Perisai Diam-Diam</div>
+        <span class="rtog">▼</span>
+      </div>
+      <div class="rcb">
+        <p>Mantan prajurit tua itu berbaring di atas tempat tidurnya dengan pakaian lengkap — ia tidak pernah
+          benar-benar tidur selama ada ancaman. Setiap malam ia memilih satu orang untuk dijaganya dari kejauhan. Ia
+          tidak akan memberi tahu siapa yang ia pilih. Itu adalah rahasia yang dibawanya ke kubur. Yang pasti, malam ini
+          ia berjaga di depan pintu satu rumah tertentu, pedang pendek di samping pinggang, mata menatap kegelapan.</p>
+      </div>
+    </div>
+
+    <p>Sementara itu, di sudut desa yang paling gelap, sesosok lain juga bergerak sendiri — bukan untuk membunuh, bukan
+      untuk melindungi, tapi untuk menyebar benih kehancuran yang lebih lambat dan lebih dingin.</p>
+
+    <div class="rc solo">
+      <div class="rch" data-role="Solo — Arsonis (Arsonist)">
+        <div class="rname">🔥 Si Arsonis — Api yang Sabar</div>
+        <span class="rtog">▼</span>
+      </div>
+      <div class="rcb">
+        <p>Ia tidak memihak siapapun. Werewolf, warga, tidak peduli. Yang ia inginkan hanya satu: membakar semuanya.
+          Setiap malam ia menyelinap ke satu rumah dan meninggalkan jejak kecil — seutas sumbu, sebotol minyak
+          tersembunyi di balik kayu bakar. Ia menunggu. Bersabar. Dan ketika semua rumah sudah penuh dengan bahan
+          bakarnya, ia akan berdiri di tengah alun-alun, menyalakan korek, dan tersenyum.</p>
+      </div>
+    </div>
+    <hr class="f">
+
+    <div class="chapter" id="b4">
+      <div class="clabel">Bab Empat</div>
+      <div class="ctit">Fajar — dan Darah di Antara Puing</div>
+      <div class="corn">⸻ ✦ ⸻</div>
+    </div>
+
+    <p>Pagi datang seperti biasa — seharusnya membawa ketenangan, seharusnya membawa harapan. Tapi ketika warga pertama
+      membuka pintu dan melangkah keluar, bau amis yang kental langsung menyambut mereka. Di depan rumah nomor tujuh,
+      ada noda gelap di tanah yang masih basah dari embun malam, dan tepat di sampingnya — sebuah tubuh yang tidak
+      bergerak lagi.</p>
+    <p>Seseorang telah mati. Permainan telah dimulai dalam serius.</p>
+
+    <div class="scene">
+      ☀️ Mentari pagi menyinari Amaraveld, tapi cahayanya tidak terasa hangat.<br>
+      Warga berkumpul di sekitar tubuh yang terbaring kaku, wajah-wajah memucat.<br>
+      Tidak ada yang berbicara. Semua tahu: permainan sudah dimulai.<br><br>
+      <em>"Siapa yang melakukan ini?" bisik seorang warga.<br>
+        Tidak ada yang menjawab. Tapi semua orang melirik ke kiri dan ke kanan.</em>
+    </div>
+
+    <p>Di tengah suasana hening yang menyekik itu, si Peramal sudah tahu apa yang harus dilakukan. Semalam ia berhasil
+      menerawang satu orang — dan hasilnya mengejutkan, menakutkan: orang yang selama ini paling ramah di desa, yang
+      selalu membawa roti segar ke pertemuan warga, yang selalu tersenyum dengan hangat kepada anak-anak — adalah
+      Werewolf. Tapi bagaimana cara menyampaikannya tanpa terlihat gila? Tanpa membuat dirinya sendiri menjadi target
+      berikutnya? Siapa yang akan percaya kepada seorang peramal jika tidak ada bukti nyata?</p>
+
+    <p>Di sinilah permainan psikologi dimulai. Si Penyihir Gelap (Sorcerer), yang berpura-pura sebagai warga biasa,
+      sudah mulai mengamati gerak-gerik si Peramal sejak semalam.</p>
+
+    <div class="rc evil">
+      <div class="rch" data-role="Tim Jahat — Penyihir Gelap (Sorcerer)">
+        <div class="rname">🧙🏼‍♂️🔮 Sorcerer — Mata dan Telinga Werewolf</div>
+        <span class="rtog">▼</span>
+      </div>
+      <div class="rcb">
+        <p>Ia berbicara lembut dan berpenampilan sederhana. Warga menyukainya karena ia tidak pernah membuat masalah dan
+          selalu membantu di ladang. Tapi setiap malam, setelah semua orang tidur, ia menyelidiki — mencari tahu siapa
+          si Peramal. Karena jika Peramal berhasil mengidentifikasi Werewolf, permainan akan berakhir terlalu cepat. Dan
+          ia tidak bisa membiarkan itu terjadi.</p>
+      </div>
+    </div>
+    <hr class="f">
+
+    <div class="chapter" id="b5">
+      <div class="clabel">Bab Lima</div>
+      <div class="ctit">Siang — Percakapan dan Curiga</div>
+      <div class="corn">⸻ ✦ ⸻</div>
+    </div>
+
+    <p>Ketika matahari mencapai titik tertingginya, warga berkumpul lagi di alun-alun yang sama — kali ini bukan untuk
+      berkabung, melainkan untuk mencari jawaban. Mereka ingin berdebat, saling menuding, saling mempertanyakan
+      keberadaan masing-masing di malam yang berdarah itu. Ketakutan membuat mereka cepat marah.</p>
+
+    <p>Suasana siang itu riuh dan panas, lebih panas dari matahari di atas kepala. Semua orang bicara sekaligus. Si
+      Penyamak (Tanner) — seorang pria aneh yang selalu membawa pisau penyamak kulit ke mana-mana — tiba-tiba berdiri
+      dan berteriak keras-keras, menuding tetangganya tanpa bukti apapun. Wajahnya merah, matanya berapi-api.</p>
+
+    <div class="rc solo">
+      <div class="rch" data-role="Solo — Penyamak (Tanner)">
+        <div class="rname">🪓🩸 Tanner — Pria yang Ingin Mati</div>
+        <span class="rtog">▼</span>
+      </div>
+      <div class="rcb">
+        <p>Dari luar ia terlihat seperti orang yang marah dan tidak stabil. Tapi di dalam hatinya, si Tanner punya
+          tujuan yang sangat spesifik dan sangat gila: ia ingin dihakimi oleh warga. Bukan dibunuh Werewolf, bukan
+          diracun, bukan ditembak Hunter — ia ingin dipilih oleh tangan-tangan warga sendiri sebagai target eksekusi.
+          Itulah kemenangan sejatinya. Karena hanya dengan cara itu kutukan yang menderanya sejak lahir akan terangkat.
+        </p>
+      </div>
+    </div>
+
+    <p>Perdebatan siang itu tidak menghasilkan keputusan. Semua orang masih saling curiga, dan matahari sudah mulai
+      turun.</p>
+
+    <div class="pq">"Di Amaraveld, kau tidak bisa mempercayai siapapun.<br>Bahkan dirimu sendiri."</div>
+    <hr class="f">
+
+    <div class="chapter" id="b6">
+      <div class="clabel">Bab Enam</div>
+      <div class="ctit">Sore — Pengadilan Tanpa Hakim</div>
+      <div class="corn">⸻ ✦ ⸻</div>
+    </div>
+
+    <p>Ketika matahari menyentuh cakrawala, warga berkumpul untuk ritual yang paling menegangkan: voting. Setiap orang
+      memberikan satu suara. Siapa yang paling dicurigai, dialah yang akan dieksekusi sebelum malam tiba. Tidak ada
+      persidangan. Tidak ada pengacara. Hanya suara-suara yang diteriakkan satu per satu di alun-alun.</p>
+
+    <p>Dan yang mendapat suara terbanyak adalah seseorang yang selama ini tampak paling tidak mencurigakan — seorang
+      wanita tua yang berjualan sayur di pasar setiap pagi, yang ramah, yang sering memberi napas kepada anak yatim
+      piatu. Ketika keputusan diumumkan dan para lelaki datang membawa tali, wanita itu tidak melawan. Ia hanya
+      tersenyum tipis, seperti sudah menerima takdir. Warga mengira ia menyerah dengan pasrah. Tapi mereka tidak tahu —
+      ia bukan Werewolf. Ia adalah Hunter yang akan mengambil satu orang bersama dirinya dalam jatuh.</p>
+
+    <div class="rc">
+      <div class="rch" data-role="Tim Baik — Pemburu (Hunter)">
+        <div class="rname">🏹 Hunter — Kematian yang Mahal Harganya</div>
+        <span class="rtog">▼</span>
+      </div>
+      <div class="rcb">
+        <p>Membunuh Hunter bukan hal yang murah. Setiap Hunter yang mati di tangan voting rakyat mendapatkan satu
+          kesempatan terakhir: menembak satu orang sebelum ia jatuh. Jika tebakannya tepat dan yang ditembaknya adalah
+          Werewolf — maka pengorbanannya tidak sia-sia. Tapi jika meleset, ia hanya menambah korban di pihak yang salah.
+        </p>
+      </div>
+    </div>
+
+    <p>Wanita tua itu mengangkat busurnya dengan tangan yang gemetar, tapi matanya tajam. Ia menatap kerumunan. Memilih.
+      Dan ketika anak panah meluncur di senja yang keemasan itu, semua orang menahan napas.</p>
+    <hr class="f">
+
+    <div class="chapter" id="b7">
+      <div class="clabel">Bab Tujuh</div>
+      <div class="ctit">Malam Kedua — Ramuan dan Racun</div>
+      <div class="corn">⸻ ✦ ⸻</div>
+    </div>
+
+    <p>Setiap malam, si Penyihir (Witch) duduk di depan meja kayunya yang penuh dengan botol-botol kecil yang misterius.
+      Obat-obatan turun-temurun, resep dari nenek moyang yang sudah lupa siapa mereka. Di tangannya ada dua botol yang
+      paling penting, paling berbeban: satu berwarna biru pucat — ramuan kekebalan yang jika diminum membuat semua warga
+      kebal dari serangan Werewolf selama satu malam. Satu lagi berwarna hitam pekat, seperti malam itu sendiri — racun
+      yang jika diteteskan ke air minum seseorang, akan membunuhnya sebelum fajar datang.</p>
+
+    <p>Masalahnya, setiap botol hanya bisa digunakan sekali. Dan si Penyihir harus memilih dengan tepat — kapan
+      menggunakan obat, kapan menggunakan racun, dan kapan tidak menggunakan keduanya sama sekali.</p>
+
+    <div class="rc">
+      <div class="rch" data-role="Tim Baik — Penyihir (Witch)">
+        <div class="rname">🧙🏻‍♀️ Witch — Antara Obat dan Bisa</div>
+        <span class="rtog">▼</span>
+      </div>
+      <div class="rcb">
+        <p>Malam ini ia tahu Werewolf sudah memilih target. Dan ia punya pilihan: gunakan ramuan obat sekarang untuk
+          menyelamatkan semua orang, atau simpan dan gunakan racun untuk membunuh seseorang yang ia curigai sebagai
+          Werewolf. Jika ia salah sasaran dengan racun — ia bisa saja membunuh orang baik. Tapi jika ia tidak melakukan
+          apapun, korban Werewolf akan jatuh lagi di pagi hari.</p>
+      </div>
+    </div>
+
+    <p>Di sisi lain desa, seseorang yang tidak tertidur tengah bergerak dengan sangat hati-hati. Ini adalah Si Corrupt —
+      entitas paling berbahaya bukan karena ia membunuh, tapi karena ia melumpuhkan.</p>
+
+    <div class="rc solo">
+      <div class="rch" data-role="Solo — Corrupt">
+        <div class="rname">🧑🏻‍💻 Corrupt — Sabotase Tanpa Batas</div>
+        <span class="rtog">▼</span>
+      </div>
+      <div class="rcb">
+        <p>Ia tidak membunuh. Tapi setiap malam, ia memilih satu orang dan men-"hack" mereka — mematikan kemampuan
+          mereka untuk menggunakan skill atau bahkan memberikan suara. Si Peramal tidak bisa menerawang. Si Penjaga
+          tidak bisa melindungi. Si Penyihir tidak bisa meracuni. Satu per satu, ia melumpuhkan. Dan ia menunggu —
+          sampai semua orang tumbang karena Werewolf atau karena voting yang kacau, dan ia tinggal sendirian. Itulah
+          kemenangannya: menjadi yang terakhir berdiri.</p>
+      </div>
+    </div>
+    <hr class="f">
+
+    <div class="chapter" id="b8">
+      <div class="clabel">Bab Delapan</div>
+      <div class="ctit">Kebangkitan — Keajaiban Necromancer</div>
+      <div class="corn">⸻ ✦ ⸻</div>
+    </div>
+
+    <p>Ada satu jiwa di Amaraveld yang berbeda dari semua yang lain, seperti berasal dari dimensi lain. Bukan karena ia
+      jahat, bukan karena ia berbahaya pada pandangan pertama — tapi karena ia memiliki kekuatan yang melanggar hukum
+      alam yang paling mendasar: ia bisa mengembalikan yang sudah pergi ke alam sebelah, bisa membangkitkan kembali
+      nyawa yang sudah hilang.</p>
+
+    <div class="rc">
+      <div class="rch" data-role="Tim Baik — Necromancer">
+        <div class="rname">🔮🪄 Necromancer — Dia yang Menantang Kematian</div>
+        <span class="rtog">▼</span>
+      </div>
+      <div class="rcb">
+        <p>Sekali dalam seumur hidupnya — hanya sekali — ia bisa membangkitkan satu jiwa yang sudah pergi. Kekuatan ini
+          tidak gratis: ia memerlukan konsentrasi penuh, pengorbanan kecil, dan doa yang benar. Dan yang ia bangkitkan
+          akan kembali dengan semua kemampuan mereka utuh. Jika ia membangkitkan si Penyihir, botol ramuan yang sudah
+          kosong pun akan terisi kembali. Jika ia membangkitkan si Peramal, mata yang sudah tertutup itu akan terbuka
+          lagi untuk menerawang.</p>
+      </div>
+    </div>
+
+    <p>Malam itu, Necromancer berdiri di depan pusara kecil di tepi desa. Ia menyebut nama. Tanah bergetar. Dan perlahan
+      — sangat perlahan — seseorang bangkit kembali dari bawah tanah yang dingin.</p>
+
+    <div class="scene">
+      Seluruh desa terdiam ketika di pagi harinya, seseorang yang kemarin sudah dimakamkan<br>
+      tiba-tiba berjalan masuk ke alun-alun dengan langkah gontai.<br>
+      Pakaiannya masih berlumuran tanah, tapi matanya terbuka.<br><br>
+      <em>"Aku kembali," katanya pelan.<br>
+        "Dan aku masih ingat semuanya."</em>
+    </div>
+    <hr class="f">
+
+    <div class="chapter" id="b9">
+      <div class="clabel">Bab Sembilan</div>
+      <div class="ctit">Kutukan si Terkutuk</div>
+      <div class="corn">⸻ ✦ ⸻</div>
+    </div>
+
+    <p>Di antara semua penghuni Amaraveld, tidak ada yang menanggung beban sekeras si Cursed — si Terkutuk. Ia memulai
+      permainan di pihak yang benar, bersama warga desa, dengan niat yang murni. Tapi dalam tubuhnya mengalir darah yang
+      sudah lama dicampuri sesuatu yang gelap.</p>
+
+    <div class="rc">
+      <div class="rch" data-role="Tim Baik* — Terkutuk (Cursed)">
+        <div class="rname">🧟‍♂ Cursed — Korban Sekaligus Ancaman</div>
+        <span class="rtog">▼</span>
+      </div>
+      <div class="rcb">
+        <p>Selama ia tidak diserang Werewolf, ia adalah warga biasa. Ia berdiskusi bersama warga lain, ia memberikan
+          suara, ia bahkan bisa mengidentifikasi siapa yang mencurigakan. Tapi jika malam datang dan Werewolf memilih ia
+          sebagai korban — sesuatu yang lebih kuno dan lebih gelap dari kematian biasa akan terjadi. Kutukan dalam
+          darahnya bangkit. Ia tidak mati. Ia berubah. Dan Werewolf yang menyerangnya pun tewas seketika, keracunan oleh
+          darah kutukan yang mengalir. Mulai malam itu, si Terkutuk bergabung di pihak Werewolf — bukan karena memilih,
+          tapi karena tidak bisa menolak takdirnya.</p>
+      </div>
+    </div>
+
+    <p>Inilah yang membuat Amaraveld begitu mengerikan dan begitu indah pada saat bersamaan: tidak ada yang benar-benar
+      aman, bahkan dalam kebenaran. Bahkan seseorang yang hari ini adalah kawanmu, yang bersama-sama tidur di rumah yang
+      sama, esok hari bisa berdiri di pihak yang berlawanan — bukan karena pengkhianatan yang disadari, tapi karena
+      takdir yang ditulis jauh sebelum ia lahir, dalam darah dan tulang.</p>
+    <hr class="f">
+
+    <div class="chapter" id="b10">
+      <div class="clabel">Bab Sepuluh</div>
+      <div class="ctit">Akhir — Siapa yang Tersisa?</div>
+      <div class="corn">⸻ ✦ ⸻</div>
+    </div>
+
+    <p>Amaraveld tidak memiliki satu akhir. Ia memiliki banyak akhir, tergantung pada siapa yang masih berdiri ketika
+      fajar hari terakhir tiba.</p>
+
+    <p><strong style="color:var(--moon);">Jika tim warga berhasil mengeksekusi semua Werewolf</strong> — dan Alpha tidak
+      sempat mengubah siapapun di momen terakhirnya — maka desa akan berduka dengan cara yang aneh: mereka menang, tapi
+      mereka kehilangan terlalu banyak. Rumah-rumah kosong. Nama-nama di batu nisan. Dan sebuah pesta kemenangan yang
+      tidak terasa seperti kemenangan.</p>
+
+    <p><strong style="color:#e08080;">Jika Werewolf berhasil menyamakan jumlah dengan warga</strong> — jika yang tersisa
+      hanya satu warga lawan satu Werewolf — maka desa tidak bisa lagi berfungsi. Malam itu menjadi yang terakhir, dan
+      Amaraveld resmi jatuh ke tangan para serigala.</p>
+
+    <p><strong style="color:#9080d8;">Tapi ada juga akhir ketiga, keempat, dan kelima</strong> — yang tidak pernah
+      diduga siapapun. Si Tanner yang akhirnya berhasil membuat dirinya dieksekusi oleh tangan warga sendiri, tertawa
+      puas di detik terakhirnya. Si Corrupt yang menunggu dalam bayangan sampai semua orang habis dan ia berdiri
+      sendirian di tengah reruntuhan. Atau — yang paling mengerikan dari semuanya — si Arsonis yang keluar dari balik
+      asap dan menekan detonator.</p>
+
+    <div class="scene">
+      🔥 Amaraveld terbakar habis dalam semalam.<br>
+      Tidak ada yang selamat. Tidak ada pemenang.<br>
+      Hanya si Arsonis yang berdiri di bukit, memandang nyala api<br>
+      yang menerangi langit malam lebih terang dari bulan purnama manapun.<br><br>
+      <em>"Selesai," bisiknya.<br>
+        Dan ia pergi tanpa menoleh ke belakang.</em>
+    </div>
+    <hr class="f">
+
+    <div class="chapter" id="bep">
+      <div class="clabel">Epilog</div>
+      <div class="ctit">Desa yang Tidak Pernah Mati</div>
+      <div class="corn">⸻ ✦ ⸻</div>
+    </div>
+
+    <p>Esok harinya — atau seminggu kemudian, atau sebulan setelah itu, waktu terasa berbeda di Amaraveld — warga baru
+      akan datang ke desa yang telah diperbaharui. Rumah-rumah akan dibangun ulang dari puing dan abu. Nama-nama baru
+      akan terukir di papan pengenal pintu dengan huruf yang belum dimulai pudar. Dan kehidupan akan berjalan lagi,
+      seolah cerita yang baru saja berakhir dalam darah itu hanyalah mimpi pagi yang sudah lalu.</p>
+
+    <p>Tapi kabut akan datang lagi. Tanda cakar akan muncul lagi di kayu pintu gerbang. Dan seseorang — entah siapa,
+      entah dari sudut mana — akan berbisik di malam yang gelap:</p>
+
+    <div class="pq">"Werewolf ada di antara kita.<br>Lagi."</div>
+
+    <p>Dan permainan pun dimulai kembali dari awal.</p>
+
+    <p
+      style="text-align:center;color:var(--ink-dim);font-style:italic;font-family:'IM Fell English',serif;margin-top:3rem;">
+      — Selesai —</p>
+
+    <div class="end-sec">
+      <div class="end-tit">🌕 Ultimate Werewolf</div>
+      <p style="color:var(--ink-dim);font-size:.9rem;font-family:'IM Fell English',serif;font-style:italic;">
+        Lore ini ditulis berdasarkan analisis script game Werewolf.<br>
+        Tiga belas peran. Satu desa. Tidak ada yang benar-benar aman.
+      </p>
+      <button class="brev" id="brev">🎲 Ungkap Takdir Amaraveld</button>
+    </div>
+
+  </div><!-- /wrap -->
+
+  <script>
+    // ── Ending data ──────────────────────────────────────────
+    const ED = {
+      warga: { t: "☀️ Warga Menang", s: "Pagi itu berbeda dari semua pagi sebelumnya. Ketika warga berkumpul di alun-alun dan kepala Werewolf terakhir jatuh ke tanah, tidak ada teriakan kemenangan. Hanya isak tangis yang perlahan. Terlalu banyak kursi kosong di meja makan. Terlalu banyak nama yang harus diukir di batu nisan. Tapi kabut sudah pergi. Dan matahari — untuk pertama kalinya dalam berhari-hari — terasa benar-benar hangat. Desa Amaraveld selamat. Untuk sekarang." },
+      werewolf: { t: "🌕 Werewolf Menang", s: "Warga terakhir yang tersisa menatap bayangan yang mengelilinginya. Tidak ada lagi jalan keluar. Di alun-alun yang sunyi, Alpha berdiri tegak di bawah cahaya bulan, matanya bersinar dengan kebanggaan yang lama tersimpan. \"Amaraveld selalu milik kami,\" bisiknya. \"Kalian hanya meminjamnya untuk sementara.\" Dan malam itu, untuk pertama kalinya dalam sejarah desa, tidak ada fajar yang datang menjemput." },
+      tanner: { t: "🪓 Tanner Menang", s: "Tali melingkari lehernya. Wajah-wajah warga berkerut penuh keyakinan — mereka yakin telah membunuh ancaman terbesar. Tapi di detik terakhir, si Tanner tertawa. Tawa yang kencang, lega, seperti orang yang baru saja terlepas dari beban bertahun-tahun. \"Akhirnya,\" katanya. Warga baru menyadari: mereka tidak membunuh musuh. Mereka baru saja memenuhi satu-satunya keinginan si Penyamak. Kutukan itu kini terangkat — dan Tanner pergi dengan tenang ke alam yang lain." },
+      corrupt: { t: "🧑🏻‍💻 Corrupt Menang", s: "Ia tidak pernah menembak siapapun. Tidak pernah menggunakan racun. Tidak pernah menyerang. Ia hanya duduk, menunggu, dan melumpuhkan satu per satu — sampai Werewolf membunuh warga, warga membunuh Werewolf, dan semua orang saling hancurkan dari dalam. Ketika debu akhirnya mengendap, hanya satu sosok yang berdiri sendirian di tengah reruntuhan. Corrupt mengangkat tangannya dan berkata pelan: \"Server down. Game over.\"" },
+      arsonist: { t: "🔥 Arsonist Menang", s: "Selama berhari-hari ia bergerak diam-diam — ke setiap rumah, setiap gubuk, setiap sudut desa. Tidak ada yang memperhatikannya. Semua sibuk saling mencurigai. Dan ketika malam terakhir tiba, ia berdiri di bukit di luar pagar. Di tangannya, sebuah korek api tua berderak. Ia menyalakan sumbu terakhir dan berdiri, menyaksikan Amaraveld terbakar dari ujung ke ujung — satu nyala yang sempurna. Tidak ada yang tersisa. Tidak ada yang menang. Hanya api. Hanya ia." }
+    };
+
+    // ── Stars ─────────────────────────────────────────────────
+    (() => {
+      const c = document.getElementById('cover');
+      for (let i = 0; i < 60; i++) {
+        const s = document.createElement('div'); s.className = 'star';
+        s.style.cssText = `left:${Math.random() * 100}%;top:${Math.random() * 100}%;--d:${2 + Math.random() * 4}s;--dl:${Math.random() * 5}s;opacity:${.2 + Math.random() * .6}`;
+        c.appendChild(s);
+      }
+    })();
+
+    // ── Ambient audio (Web Audio API) ────────────────────────
+    let ctx = null, gn = null, started = false, muted = true;
+    function buildAudio() {
+      if (ctx) return;
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      gn = ctx.createGain(); gn.gain.value = 0; gn.connect(ctx.destination);
+      // Wind noise
+      const L = ctx.sampleRate * 4, buf = ctx.createBuffer(1, L, ctx.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < L; i++) d[i] = Math.random() * 2 - 1;
+      const ns = ctx.createBufferSource(); ns.buffer = buf; ns.loop = true;
+      const bf = ctx.createBiquadFilter(); bf.type = 'bandpass'; bf.frequency.value = 380; bf.Q.value = .25;
+      const bf2 = ctx.createBiquadFilter(); bf2.type = 'lowpass'; bf2.frequency.value = 550;
+      const wg = ctx.createGain(); wg.gain.value = .16;
+      ns.connect(bf); bf.connect(bf2); bf2.connect(wg); wg.connect(gn); ns.start();
+      // (Owl and cricket ambient sounds removed)
+    }
+    function fade(v, d) { if (!gn) return; gn.gain.cancelScheduledValues(ctx.currentTime); gn.gain.setValueAtTime(gn.gain.value, ctx.currentTime); gn.gain.linearRampToValueAtTime(v, ctx.currentTime + d); }
+    const bmut = document.getElementById('bmut');
+    bmut.addEventListener('click', () => {
+      if (!started) { buildAudio(); started = true; muted = false; fade(.7, 2); bmut.textContent = '🔊'; bmut.classList.add('on'); }
+      else if (!muted) { muted = true; fade(0, .5); bmut.textContent = '🔇'; bmut.classList.remove('on'); }
+      else { muted = false; fade(.7, .5); bmut.textContent = '🔊'; bmut.classList.add('on'); }
+    });
+
+    // Try to auto-start ambient audio on page load. Browsers may block playback
+    // until a user gesture — in that case we listen for the first interaction
+    // and resume audio then.
+    function tryAutoStartAudio() {
+      try {
+        if (started) return;
+        buildAudio();
+        started = true;
+        // If context is suspended, resume on first user interaction
+        if (ctx && ctx.state === 'suspended') {
+          const resume = () => {
+            ctx.resume().then(() => {
+              fade(.7, 2); muted = false; bmut.textContent = '🔊'; bmut.classList.add('on');
+            }).catch(() => { });
+            window.removeEventListener('click', resume);
+            window.removeEventListener('keydown', resume);
+          };
+          window.addEventListener('click', resume, { once: true });
+          window.addEventListener('keydown', resume, { once: true });
+        } else {
+          fade(.7, 2); muted = false; bmut.textContent = '🔊'; bmut.classList.add('on');
+        }
+      } catch (e) {/* ignore */ }
+    }
+
+    // Attempt autoplay now (script is at end of body so DOM exists)
+    tryAutoStartAudio();
+
+    // ── Progress bar ──────────────────────────────────────────
+    const chapters = [...document.querySelectorAll('.chapter[id]')];
+    const pb = document.getElementById('pbar'), pl = document.getElementById('plabel');
+    function prog() {
+      const sy = window.scrollY, dh = document.documentElement.scrollHeight - window.innerHeight;
+      pb.style.width = (dh > 0 ? Math.min(100, (sy / dh) * 100) : 0) + '%';
+      let cur = 0; chapters.forEach((c, i) => { if (sy + 80 >= c.offsetTop) cur = i; });
+      pl.textContent = `Bab ${cur + 1} / ${chapters.length}`;
+    }
+    window.addEventListener('scroll', prog, { passive: true }); prog();
+
+    // ── Collapsible role cards ────────────────────────────────
+    document.querySelectorAll('.rc').forEach(card => {
+      card.querySelector('.rch')?.addEventListener('click', () => card.classList.toggle('open'));
+    });
+
+    // ── Modal open/close ──────────────────────────────────────
+    function updateCtrlVisibility() {
+      const tocOpen = document.getElementById('tocM')?.classList.contains('open');
+      const mapOpen = document.getElementById('mapM')?.classList.contains('open');
+      const endOpen = document.getElementById('endM')?.classList.contains('open');
+      const ctrl = document.getElementById('ctrl');
+      if (!ctrl) return;
+      if (tocOpen || mapOpen || endOpen) {
+        // hide and collapse the control panel while a modal is open
+        ctrl.classList.remove('expanded');
+        const bt = document.getElementById('btoggle'); if (bt) bt.setAttribute('aria-expanded', 'false');
+        ctrl.style.display = 'none';
+      } else {
+        ctrl.style.display = 'flex';
+      }
+    }
+
+    function openModal(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.add('open');
+      updateCtrlVisibility();
+    }
+
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.remove('open');
+      // update visibility after close
+      updateCtrlVisibility();
+    }
+
+    document.getElementById('btoc').onclick = () => openModal('tocM');
+    document.getElementById('bmap').onclick = () => openModal('mapM');
+    document.getElementById('brev').onclick = () => openModal('endM');
+
+    // Toggle handler for compact control
+    const ctrlEl = document.getElementById('ctrl');
+    const btoggle = document.getElementById('btoggle');
+    if (btoggle && ctrlEl) {
+      btoggle.addEventListener('click', () => {
+        const expanded = ctrlEl.classList.toggle('expanded');
+        btoggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      });
+    }
+
+    document.querySelectorAll('.mclose,[data-close]').forEach(el => {
+      el.addEventListener('click', () => {
+        const id = el.dataset.close || el.closest('.modal')?.id;
+        if (id) closeModal(id);
+      });
+    });
+
+    document.querySelectorAll('.modal').forEach(m => {
+      m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); });
+    });
+
+    // Ensure correct initial visibility
+    updateCtrlVisibility();
+
+    // Night mode removed (button + handler deleted)
+
+    // ── Ending modal ──────────────────────────────────────────
+    const eres = document.getElementById('eres');
+    document.querySelectorAll('.ech').forEach(btn => {
+      btn.onclick = () => {
+        const e = ED[btn.dataset.k]; if (!e) return;
+        eres.classList.remove('show');
+        setTimeout(() => {
+          eres.innerHTML = `<strong style="color:var(--gold);font-family:'Cinzel Decorative',serif;font-size:.82rem;">${e.t}</strong><br><br>${e.s}`;
+          eres.classList.add('show');
+        }, 160);
+        document.querySelectorAll('.ech').forEach(b => b.style.borderColor = '');
+        btn.style.borderColor = 'var(--gold)';
+      };
+    });
+
+    // ── Fade-in observer ──────────────────────────────────────
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((en, i) => {
+        if (en.isIntersecting) {
+          setTimeout(() => en.target.classList.add('vis'), i * 55);
+          obs.unobserve(en.target);
+        }
+      });
+    }, { threshold: .08 });
+    document.querySelectorAll('.chapter,.rc,.scene,p,.pq,.roster').forEach(el => obs.observe(el));
+  </script>
+</body>
+
+</html>
