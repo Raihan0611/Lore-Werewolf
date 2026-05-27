@@ -223,7 +223,7 @@
     }
 
     .mclose {
-      position: absolute;
+      position: sticky;
       top: .8rem;
       right: 1rem;
       background: none;
@@ -232,6 +232,9 @@
       font-size: 1.2rem;
       cursor: pointer;
       line-height: 1;
+      z-index: 10;
+      float: right;
+      margin-bottom: .8rem;
     }
 
     .mclose:hover {
@@ -551,7 +554,18 @@
 
     p.dropcap::first-letter {
       font-family: 'Cinzel Decorative', serif;
-      font-size: 2.8rem;
+      font-size: 4rem;
+      line-height: .85;
+      float: left;
+      margin-right: .02em;
+      margin-top: .1em;
+      color: var(--gold);
+      text-shadow: 0 0 20px rgba(201, 168, 76, .4);
+    }
+
+    p.dropcapcard::first-letter {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 3.8rem;
       line-height: .85;
       float: left;
       margin-right: .02em;
@@ -990,13 +1004,13 @@
         <td class="em">🧙🏻‍♀️</td>
         <td class="tn tg">Penyihir (Witch)</td>
         <td class="tg">Tim Baik</td>
-        <td>Satu racun mematikan, satu ramuan penyembuh — pilih bijak</td>
+        <td>Satu racun mematikan, satu ramuan penyembuh</td>
       </tr>
       <tr>
         <td class="em">🏹</td>
         <td class="tn tg">Pemburu (Hunter)</td>
         <td class="tg">Tim Baik</td>
-        <td>Jika mati di-vote, menembak satu orang sebelum jatuh</td>
+        <td>Jika mati di-vote, dapat menembak satu orang sebelum jatuh</td>
       </tr>
       <tr>
         <td class="em">🔮🪄</td>
@@ -1008,7 +1022,7 @@
         <td class="em">🧟‍♂</td>
         <td class="tn tg">Terkutuk (Cursed)</td>
         <td class="tg">Tim Baik*</td>
-        <td>Jika diserang Werewolf, bangkit menjadi Werewolf — sang penyerang mati</td>
+        <td>Jika diserang Werewolf, bangkit menjadi Werewolf lalu sang penyerang mati</td>
       </tr>
       <tr>
         <td class="em">🐺</td>
@@ -1026,7 +1040,7 @@
         <td class="em">🧙🏼‍♂️🔮</td>
         <td class="tn te">Penyihir Gelap (Sorcerer)</td>
         <td class="te">Tim Jahat</td>
-        <td>Mengidentifikasi siapa Peramal untuk dilaporkan ke Werewolf</td>
+        <td>Mengidentifikasi siapa Seer untuk dilaporkan ke Werewolf</td>
       </tr>
       <tr>
         <td class="em">🪓🩸</td>
@@ -1038,7 +1052,7 @@
         <td class="em">🧑🏻‍💻</td>
         <td class="tn ts">Corrupt</td>
         <td class="ts">Solo</td>
-        <td>Men-hack satu player tiap malam, menang jika jadi orang terakhir yang hidup</td>
+        <td>Meng-hack satu player tiap malam, menang jika jadi orang terakhir yang hidup</td>
       </tr>
       <tr>
         <td class="em">🔥</td>
@@ -1072,7 +1086,8 @@
         <span class="rtog">▼</span>
       </div>
       <div class="rcb">
-        <p class="dropcap">Di ujung desa, di sebuah rumah dengan jendela yang selalu tertutup, dua sosok duduk berbisik
+        <p class="dropcapcard">Di ujung desa, di sebuah rumah dengan jendela yang selalu tertutup, dua sosok duduk
+          berbisik
           dalam gelap.
           Mereka sudah di sini sejak musim dingin yang lalu — berbaur, berpura-pura, tertawa bersama warga di pasar.
           Tapi malam ini, mereka tidak perlu berpura-pura lagi. Alpha menekan telapak tangannya ke meja dan berkata
@@ -1091,7 +1106,7 @@
         <span class="rtog">▼</span>
       </div>
       <div class="rcb">
-        <p class="dropcap">Di kamar kecilnya yang penuh dengan buku tua dan kristal retak, si Peramal memegang jimat
+        <p class="dropcapcard">Di kamar kecilnya yang penuh dengan buku tua dan kristal retak, si Peramal memegang jimat
           pemberian neneknya.
           Tiap malam, ia memejamkan mata dan menerawang — dan tiap malam, ia melihat wajah seseorang di balik bayangan.
           Malam ini ia sudah punya firasat. Ia sudah tahu siapa yang harus ia periksa. Tapi apakah ia akan selamat
@@ -1105,7 +1120,8 @@
         <span class="rtog">▼</span>
       </div>
       <div class="rcb">
-        <p class="dropcap">Mantan prajurit tua itu berbaring di atas tempat tidurnya dengan pakaian lengkap — ia tidak
+        <p class="dropcapcard">Mantan prajurit tua itu berbaring di atas tempat tidurnya dengan pakaian lengkap — ia
+          tidak
           pernah
           benar-benar tidur selama ada ancaman. Setiap malam ia memilih satu orang untuk dijaganya dari kejauhan. Ia
           tidak akan memberi tahu siapa yang ia pilih. Itu adalah rahasia yang dibawanya ke kubur. Yang pasti, malam ini
@@ -1122,7 +1138,7 @@
         <span class="rtog">▼</span>
       </div>
       <div class="rcb">
-        <p class="dropcap">Ia tidak memihak siapapun. Werewolf, warga, tidak peduli. Yang ia inginkan hanya satu:
+        <p class="dropcapcard">Ia tidak memihak siapapun. Werewolf, warga, tidak peduli. Yang ia inginkan hanya satu:
           membakar semuanya.
           Setiap malam ia menyelinap ke satu rumah dan meninggalkan jejak kecil — seutas sumbu, sebotol minyak
           tersembunyi di balik kayu bakar. Ia menunggu. Bersabar. Dan ketika semua rumah sudah penuh dengan bahan
@@ -1167,7 +1183,7 @@
         <span class="rtog">▼</span>
       </div>
       <div class="rcb">
-        <p class="dropcap">Ia berbicara lembut dan berpenampilan sederhana. Warga menyukainya karena ia tidak pernah
+        <p class="dropcapcard">Ia berbicara lembut dan berpenampilan sederhana. Warga menyukainya karena ia tidak pernah
           membuat masalah dan
           selalu membantu di ladang. Tapi setiap malam, setelah semua orang tidur, ia menyelidiki — mencari tahu siapa
           si Peramal. Karena jika Peramal berhasil mengidentifikasi Werewolf, permainan akan berakhir terlalu cepat. Dan
@@ -1197,7 +1213,8 @@
         <span class="rtog">▼</span>
       </div>
       <div class="rcb">
-        <p class="dropcap">Dari luar ia terlihat seperti orang yang marah dan tidak stabil. Tapi di dalam hatinya, si
+        <p class="dropcapcard">Dari luar ia terlihat seperti orang yang marah dan tidak stabil. Tapi di dalam hatinya,
+          si
           Tanner punya
           tujuan yang sangat spesifik dan sangat gila: ia ingin dihakimi oleh warga. Bukan dibunuh Werewolf, bukan
           diracun, bukan ditembak Hunter — ia ingin dipilih oleh tangan-tangan warga sendiri sebagai target eksekusi.
@@ -1235,7 +1252,7 @@
         <span class="rtog">▼</span>
       </div>
       <div class="rcb">
-        <p class="dropcap">Membunuh Hunter bukan hal yang murah. Setiap Hunter yang mati di tangan voting rakyat
+        <p class="dropcapcard">Membunuh Hunter bukan hal yang murah. Setiap Hunter yang mati di tangan voting rakyat
           mendapatkan satu
           kesempatan terakhir: menembak satu orang sebelum ia jatuh. Jika tebakannya tepat dan yang ditembaknya adalah
           Werewolf — maka pengorbanannya tidak sia-sia. Tapi jika meleset, ia hanya menambah korban di pihak yang salah.
@@ -1269,7 +1286,8 @@
         <span class="rtog">▼</span>
       </div>
       <div class="rcb">
-        <p class="dropcap">Malam ini ia tahu Werewolf sudah memilih target. Dan ia punya pilihan: gunakan ramuan obat
+        <p class="dropcapcard">Malam ini ia tahu Werewolf sudah memilih target. Dan ia punya pilihan: gunakan ramuan
+          obat
           sekarang untuk
           menyelamatkan semua orang, atau simpan dan gunakan racun untuk membunuh seseorang yang ia curigai sebagai
           Werewolf. Jika ia salah sasaran dengan racun — ia bisa saja membunuh orang baik. Tapi jika ia tidak melakukan
@@ -1314,7 +1332,7 @@
         <span class="rtog">▼</span>
       </div>
       <div class="rcb">
-        <p class="dropcap">Sekali dalam seumur hidupnya — hanya sekali — ia bisa membangkitkan satu jiwa yang sudah
+        <p class="dropcapcard">Sekali dalam seumur hidupnya — hanya sekali — ia bisa membangkitkan satu jiwa yang sudah
           pergi. Kekuatan ini
           tidak gratis: ia memerlukan konsentrasi penuh, pengorbanan kecil, dan doa yang benar. Dan yang ia bangkitkan
           akan kembali dengan semua kemampuan mereka utuh. Jika ia membangkitkan si Penyihir, botol ramuan yang sudah
@@ -1352,7 +1370,8 @@
         <span class="rtog">▼</span>
       </div>
       <div class="rcb">
-        <p class="dropcap">Selama ia tidak diserang Werewolf, ia adalah warga biasa. Ia berdiskusi bersama warga lain,
+        <p class="dropcapcard">Selama ia tidak diserang Werewolf, ia adalah warga biasa. Ia berdiskusi bersama warga
+          lain,
           ia memberikan
           suara, ia bahkan bisa mengidentifikasi siapa yang mencurigakan. Tapi jika malam datang dan Werewolf memilih ia
           sebagai korban — sesuatu yang lebih kuno dan lebih gelap dari kematian biasa akan terjadi. Kutukan dalam
@@ -1428,7 +1447,7 @@
     <div class="end-sec">
       <div class="end-tit">🌕 Ultimate Werewolf</div>
       <p style="color:var(--ink-dim);font-size:.9rem;font-family:'IM Fell English',serif;font-style:italic;">
-        Lore ini ditulis berdasarkan analisis script game Werewolf.<br>
+        Lore ini ditulis berdasarkan script game Werewolf.<br>
         Tiga belas peran. Satu desa. Tidak ada yang benar-benar aman.
       </p>
       <button class="brev" id="brev">🎲 Ungkap Takdir Amaraveld</button>
@@ -1571,6 +1590,15 @@
     function openModal(id) {
       const el = document.getElementById(id);
       if (!el) return;
+      // Reset ending modal when opened
+      if (id === 'endM') {
+        const eres = document.getElementById('eres');
+        if (eres) {
+          eres.classList.remove('show');
+          eres.innerHTML = '';
+        }
+        document.querySelectorAll('.ech').forEach(b => b.style.borderColor = '');
+      }
       el.classList.add('open');
       updateCtrlVisibility();
     }
